@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 *env/*
+*/backend/backend/__pycache__/*
 *backend/parkIt/__pycache__/*
 *backend/__pycache__/*
 *backend/parkIt/migrations/__pycache__/*
