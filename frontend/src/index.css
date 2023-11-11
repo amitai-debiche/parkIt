@@ -1,3 +1,56 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* NavBar Styling */
+  .nav-align {
+    @apply flex justify-between items-center lg:gap-6 xl:grid xl:grid-cols-5
+  }
+
+  .nav-container {
+    @apply mx-auto px-4 sm:px-2 lg:px-8
+  }
+
+  .title-container {
+    @apply flex items-center xl:col-span-1
+  }
+
+	.search-bar {
+		@apply block w-full rounded-md border-0 bg-white py-1.5 
+    pl-10 pr-3 text-gray-900 ring-1 ring-inset
+     ring-gray-300 placeholder:text-gray-400 
+     focus:ring-2 focus:ring-inset focus:ring-gray-900 
+     sm:text-sm sm:leading-6;
+	}
+
+  .search-bar-container {
+    @apply min-w-0 flex-1 md:px-8 lg:px-0 xl:col-span-3
+  }
+
+  .search-bar-align {
+    @apply flex items-center px-6 py-4 md:mx-auto md:max-w-3xl lg:mx-0 lg:max-w-none xl:px-0
+  }
+
+  .search-icon-overlay {
+    @apply pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3
+  }
+
+  .nav-button-container {
+    @apply lg:flex items-center justify-end xl:col-span-1
+  }
+
+  .nav-button {
+    @apply relative ml-5 flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none
+  }
+
+
+  /* Home Post Styling */ 
+  .home-post-container {
+    @apply p-4 m-5 border shadow-md rounded-lg flex flex-col
+  }
+  
+  .home-post-box {
+    @apply w-[296px] h-[296px]
+  }
+}
