@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 *env/*
 *backend/parkIt/__pycache__/*
+*backend/__pycache__/urls.cpython-310.pyc*
