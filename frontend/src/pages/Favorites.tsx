@@ -16,6 +16,7 @@ export interface Posts {
 	price: number
 	created: string
 	creator: number
+	images: string
 }
 
 function Favorites() {
@@ -49,7 +50,13 @@ function Favorites() {
 		})
 			.then((response) => response.json())
 			.then((data) => {
-				setData(data)
+				const postsWithImages = data.map((post: Posts) => {
+					return {
+						...post,
+						images: `http://127.0.0.1:8000${post.images}/`, // Change this to the actual URL or path to your images
+					};
+				});
+				setData(postsWithImages);
 				setLikedPosts(data.map((post: Posts) => post.id))
 			})
 			.catch((error) => {
