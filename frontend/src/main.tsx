@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client"
 import View from "./pages/View.tsx"
 import Home from "./pages/Home.tsx"
 import Auth from "./pages/Auth.tsx"
+import Favorites from "./pages/Favorites.tsx"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 import "./index.css"
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
 	{
 		path: "/home",
 		element: <Home />,
+	},
+  {
+		path: "/favorites",
+		element: <Favorites />,
 	},
 	{
 		path: "/view/:id/",
