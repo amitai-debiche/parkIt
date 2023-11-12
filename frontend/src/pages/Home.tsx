@@ -19,10 +19,23 @@ export interface Posts {
 function Home() {
 	const [data, setData] = useState<Data>([])
 	const [search, setSearch] = useState("")
+  const [loggedIn, setLoggedIn] = useState(true)
 	const navigate = useNavigate()
-
 	useEffect(() => {
 		// Replace 'api_url' with the actual URL of your Django API endpoint
+    fetch("http://127.0.0.1:8000/api/check-auth/")
+			.then((response) => {
+        setLoggedIn(response.status === 200)}
+      )
+			.then(() => {
+				if(!loggedIn) {
+          navigate("/")
+        }
+			})
+			.catch(() => {
+        navigate("/")
+			})
+    
 		fetch("http://127.0.0.1:8000/api/posts/")
 			.then((response) => response.json())
 			.then((data) => {
@@ -31,7 +44,7 @@ function Home() {
 			.catch((error) => {
 				console.error("Error fetching data:", error)
 			})
-	}, [])
+	}, [loggedIn, navigate])
 
 	function homeSearchPosts(newSearch: string) {
 		setSearch(newSearch)

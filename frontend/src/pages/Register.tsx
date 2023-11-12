@@ -57,15 +57,12 @@ function Register() {
 				}
 			})
 			.then((data) => {
-        const csrfToken = data.csrf_token
 				const token = data.token
 				const userId = data.user_id
 
 				localStorage.setItem("authToken", token)
 				localStorage.setItem("userId", userId)
         
-        console.log(csrfToken)
-        console.log(document.cookie)
 				navigate("/home")
 			})
 			.catch((error) => {

@@ -38,5 +38,3 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 		<RouterProvider router={router} />
 	</React.StrictMode>
 )
-
-//<Add id={1} location={'Edu Sci'} description={'Testing'} spots={1} price={20} created={'Yesterday'} creator={1} />
