@@ -108,6 +108,23 @@
 		@apply flex flex-row items-center gap-10 mt-10 text-sm;
 	}
 
+	/* Create Post Styling */
+	.photo-container {
+		@apply flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-3;
+	}
+
+	.photo-uploaded-style {
+		@apply mx-auto h-full max-h-[70vh] w-auto self-center;
+	}
+
+	.upload-label {
+		@apply relative cursor-pointer px-1 mx-1 rounded-md bg-gray-900 font-semibold text-white focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-indigo-500;
+	}
+
+	.description-style {
+		@apply pl-2 block w-full rounded-md border-2 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6;
+	}
+
 	/* Misc */
 	.one-pager-text {
 		@apply mt-[40vh] text-center font-bold justify-center;

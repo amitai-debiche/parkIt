@@ -54,9 +54,9 @@ function Favorites() {
 					return {
 						...post,
 						images: `http://127.0.0.1:8000${post.images}/`, // Change this to the actual URL or path to your images
-					};
-				});
-				setData(postsWithImages);
+					}
+				})
+				setData(postsWithImages)
 				setLikedPosts(data.map((post: Posts) => post.id))
 			})
 			.catch((error) => {
@@ -103,12 +103,17 @@ function Favorites() {
 			<NavBar icons={1} search={homeSearchPosts} searchHidden={false} />
 			{data.length > 0 ? (
 				<PostList
-          posts={data.filter(post => post.location.toLowerCase().trim().includes(search.toLowerCase()))}
+					posts={data.filter((post) =>
+						post.location.toLowerCase().trim().includes(search.toLowerCase())
+					)}
 					likedPosts={likedPosts}
 					onToggleLike={toggleLike}
 				/>
 			) : (
-				<p className="one-pager-text">You have no favorite spots, make sure to hit the heart icon to mark your favorites!</p>
+				<p className="one-pager-text">
+					You have no favorite spots, make sure to hit the heart icon to mark
+					your favorites!
+				</p>
 			)}
 		</>
 	)

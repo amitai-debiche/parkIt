@@ -123,11 +123,7 @@ function View() {
 						<img
 							src={`http://127.0.0.1:8000${data.images}`}
 							alt={data.location}
-							style={{
-								width: "100%", // Set width to 100% of the parent container
-								height: "auto", // Maintain the aspect ratio
-								objectFit: "cover",
-							}}
+							className="w-full h-[75vh] object-scale-down"
 						/>
 					)}
 				</div>
@@ -153,25 +149,27 @@ function View() {
 					<br />
 					<br />
 					{/* Send email to seller expressing interest and providing buyer's email for further contact */}
-					<button
-						type="button"
-						className="contact-button"
-						onClick={handleContactButtonClick}
-					>
-						Contact
-					</button>
-					{isPostCreator && (
+					<div className="flex flex-row">
 						<button
 							type="button"
-							className="delete-button"
-							onClick={handleDeleteButtonClick}
+							className="contact-button"
+							onClick={handleContactButtonClick}
 						>
-							<TrashIcon
-								className="ml-full text-red-500 h-6 w-6"
-								aria-hidden="true"
-							/>
+							Contact
 						</button>
-					)}
+						{isPostCreator && (
+							<button
+								type="button"
+								className="delete-button"
+								onClick={handleDeleteButtonClick}
+							>
+								<TrashIcon
+									className="ml-full self-center ml-5 text-red-500 h-6 w-6"
+									aria-hidden="true"
+								/>
+							</button>
+						)}
+					</div>
 				</div>
 			</div>
 		</>

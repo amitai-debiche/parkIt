@@ -21,14 +21,16 @@ function Create() {
 	// Function to handle file input change
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files ? e.target.files[0] : null
-    
+
 		if (file) {
 			// Display the selected image
 			setSelectedImage(file)
 		}
 	}
 
-  const handlePostFormChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+	const handlePostFormChange = (
+		e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+	) => {
 		const { name, value } = e.target
 		setPostData({
 			...postData,
@@ -54,13 +56,13 @@ function Create() {
 
 	const handleCreate = (e: FormEvent) => {
 		e.preventDefault()
-    const formData = new FormData();
-    console.log(formData)
-    formData.append("location", postData.location);
-    formData.append("spots", postData.spots.toString());
-    formData.append("price", postData.price.toString());
-    formData.append("description", postData.description);
-    if (selectedImage) formData.append("images", selectedImage);
+		const formData = new FormData()
+		console.log(formData)
+		formData.append("location", postData.location)
+		formData.append("spots", postData.spots.toString())
+		formData.append("price", postData.price.toString())
+		formData.append("description", postData.description)
+		if (selectedImage) formData.append("images", selectedImage)
 
 		fetch("http://127.0.0.1:8000/api/posts/", {
 			method: "POST",
@@ -95,13 +97,13 @@ function Create() {
 						>
 							Spot photo
 						</label>
-						<div className="flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-3">
+						<div className="photo-container">
 							<div className="text-center">
 								{selectedImage ? (
 									<img
 										src={URL.createObjectURL(selectedImage)}
 										alt="Selected"
-										className="mx-auto h-full max-h-[70vh] w-auto self-center"
+										className="photo-uploaded-style"
 									/>
 								) : (
 									<div className="self-center min-w-[150px] mt-40">
@@ -110,10 +112,7 @@ function Create() {
 											aria-hidden="true"
 										/>
 										<div className="mt-4 flex text-sm leading-6 text-gray-400">
-											<label
-												htmlFor="file-upload"
-												className="relative cursor-pointer px-1 mx-1 rounded-md bg-gray-900 font-semibold text-white focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-indigo-500"
-											>
+											<label htmlFor="file-upload" className="upload-label">
 												<span>Upload a file</span>
 												<input
 													id="file-upload"
@@ -149,7 +148,7 @@ function Create() {
 								name="location"
 								type="text"
 								maxLength={70}
-                onChange={handlePostFormChange}
+								onChange={handlePostFormChange}
 								required
 								className="register-input-style w-full"
 							/>
@@ -169,9 +168,8 @@ function Create() {
 								id="description"
 								name="description"
 								rows={3}
-                onChange={handlePostFormChange}
-
-								className="pl-2 block w-full rounded-md border-2 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+								onChange={handlePostFormChange}
+								className="description-style"
 								defaultValue={""}
 							/>
 						</div>
@@ -198,7 +196,7 @@ function Create() {
 									name="price"
 									type="number"
 									max={1000}
-                  onChange={handlePostFormChange}
+									onChange={handlePostFormChange}
 									required
 									className="register-input-style w-full"
 								/>
@@ -217,7 +215,7 @@ function Create() {
 									name="spots"
 									type="number"
 									max={1000}
-                  onChange={handlePostFormChange}
+									onChange={handlePostFormChange}
 									required
 									className="register-input-style w-full"
 								/>

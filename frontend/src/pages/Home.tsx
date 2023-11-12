@@ -19,15 +19,15 @@ export interface Posts {
 	images: string
 }
 
-const API_BASE_URL = "http://127.0.0.1:8000/api";
-const POSTS_ENDPOINT = `${API_BASE_URL}/posts/`;
-const FAVORITE_POSTS_ENDPOINT = `${API_BASE_URL}/favorite-posts/`;
+const API_BASE_URL = "http://127.0.0.1:8000/api"
+const POSTS_ENDPOINT = `${API_BASE_URL}/posts/`
+const FAVORITE_POSTS_ENDPOINT = `${API_BASE_URL}/favorite-posts/`
 
 function Home() {
-	const [data, setData] = useState<Data>([]);
-	const [search, setSearch] = useState("");
-	const [likedPosts, setLikedPosts] = useState<number[]>([]);
-	const navigate = useNavigate();
+	const [data, setData] = useState<Data>([])
+	const [search, setSearch] = useState("")
+	const [likedPosts, setLikedPosts] = useState<number[]>([])
+	const navigate = useNavigate()
 
 	const fetchPosts = () => {
 		fetch(POSTS_ENDPOINT, {
@@ -38,9 +38,9 @@ function Home() {
 		})
 			.then((response) => {
 				if (response.status === 200) {
-					return response.json();
+					return response.json()
 				} else {
-					throw new Error("Failed to fetch posts.");
+					throw new Error("Failed to fetch posts.")
 				}
 			})
 			.then((postData) => {
@@ -48,14 +48,14 @@ function Home() {
 					return {
 						...post,
 						images: `http://127.0.0.1:8000${post.images}/`, // Change this to the actual URL or path to your images
-					};
-				});
-				setData(postsWithImages);
+					}
+				})
+				setData(postsWithImages)
 			})
 			.catch((error) => {
-				console.error("Error fetching posts:", error);
-			});
-	};
+				console.error("Error fetching posts:", error)
+			})
+	}
 
 	const fetchLikedPosts = () => {
 		fetch(FAVORITE_POSTS_ENDPOINT, {
@@ -66,20 +66,20 @@ function Home() {
 		})
 			.then((response) => {
 				if (response.status === 200) {
-					return response.json();
+					return response.json()
 				} else {
-					throw new Error("Failed to fetch liked posts.");
+					throw new Error("Failed to fetch liked posts.")
 				}
 			})
 			.then((data) => {
-				const likedPostIds = data.map((post: Posts) => post.id);
-				setLikedPosts(likedPostIds);
+				const likedPostIds = data.map((post: Posts) => post.id)
+				setLikedPosts(likedPostIds)
 			})
 			.catch((error) => {
-				console.error("Error fetching liked posts:", error);
-			});
-	};
-	
+				console.error("Error fetching liked posts:", error)
+			})
+	}
+
 	useEffect(() => {
 		fetch("http://127.0.0.1:8000/api/check-auth/", {
 			method: "GET",
@@ -89,19 +89,19 @@ function Home() {
 		})
 			.then((response) => {
 				if (response.status !== 200) {
-					navigate("/");
+					navigate("/")
 				}
 			})
 			.catch((error) => {
-				console.error("Error:", error);
-			});
+				console.error("Error:", error)
+			})
 
-		fetchPosts();
-	}, [navigate]);
+		fetchPosts()
+	}, [navigate])
 
 	useEffect(() => {
-		fetchLikedPosts();
-	}, []);
+		fetchLikedPosts()
+	}, [])
 
 	function homeSearchPosts(newSearch: string) {
 		setSearch(newSearch)
@@ -138,11 +138,17 @@ function Home() {
 			})
 	}
 	return (
-    <>
-      <NavBar icons={3} search={homeSearchPosts} searchHidden={false} />
-      <PostList posts={data.filter(post => post.location.toLowerCase().trim().includes(search.toLowerCase()))}likedPosts={likedPosts} onToggleLike={toggleLike} />
-    </>
-  );
+		<>
+			<NavBar icons={3} search={homeSearchPosts} searchHidden={false} />
+			<PostList
+				posts={data.filter((post) =>
+					post.location.toLowerCase().trim().includes(search.toLowerCase())
+				)}
+				likedPosts={likedPosts}
+				onToggleLike={toggleLike}
+			/>
+		</>
+	)
 }
 
 export default Home
