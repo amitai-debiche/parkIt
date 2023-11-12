@@ -23,7 +23,12 @@ const PostList: React.FC<Props> = ({ posts, likedPosts, onToggleLike }) => {
 	  <div className="home-grid">
 		{posts.map((post) => (
 		  <div key={post.id} className="home-post-container">
-			<div className="hover:cursor-pointer relative">
+			<div className="hover:cursor-pointer relative"
+			style={{
+				backgroundImage: `url(${post.images})`, // Set the image as a background
+				backgroundSize: "cover", // Cover the entire container
+				backgroundPosition: "center", // Center the image
+			  }}>
 			  <div className="heart-icon">
 				<button
 				  type="button"
@@ -39,12 +44,6 @@ const PostList: React.FC<Props> = ({ posts, likedPosts, onToggleLike }) => {
 				  <HeartIcon className="h-6 w-6" aria-hidden="true" />
 				</button>
 			  </div>
-			  {/* Add an image element here */}
-			  <img
-				src={post.images} // Assuming `image` is the URL to the image
-				alt={`Image for ${post.description}`}
-				className="w-full h-40 object-cover rounded-t-md"
-			  />
 			  <HomePost
 				location={post.location}
 				spots={post.spots}
