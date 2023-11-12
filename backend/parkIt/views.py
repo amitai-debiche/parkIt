@@ -103,7 +103,7 @@ class PostList(APIView):
 
         # Create a mutable copy of the QueryDict
         mutable_data = request.data.copy()
-
+        print
         # Modify the mutable copy
         mutable_data['creator'] = user.id   
 
@@ -114,6 +114,19 @@ class PostList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, post_id):
+        try:
+            post = Post.objects.get(id=post_id)
+        except Post.DoesNotExist:
+            return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if the user is the creator of the post
+        if request.user != post.creator:
+            return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
+
+        post.delete()
+        return Response({'message': 'Post deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 class PostDetail(APIView):
 
