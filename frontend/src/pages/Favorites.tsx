@@ -18,61 +18,13 @@ export interface Posts {
 	creator: number
 }
 
-const API_BASE_URL = "http://127.0.0.1:8000/api";
-const POSTS_ENDPOINT = `${API_BASE_URL}/posts/`;
-const FAVORITE_POSTS_ENDPOINT = `${API_BASE_URL}/favorite-posts/`;
+function Favorites() {
+	const [data, setData] = useState<Data>([])
+	const [, setSearch] = useState("")
+	const [likedPosts, setLikedPosts] = useState<number[]>([])
+	const navigate = useNavigate()
 
-function Home() {
-	const [data, setData] = useState<Data>([]);
-	const [, setSearch] = useState("");
-	const [likedPosts, setLikedPosts] = useState<number[]>([]);
-	const navigate = useNavigate();
-
-	const fetchPosts = () => {
-		fetch(POSTS_ENDPOINT, {
-			method: "GET",
-			headers: {
-				Authorization: `Token ${localStorage.getItem("authToken")}`,
-			},
-		})
-			.then((response) => {
-				if (response.status === 200) {
-					return response.json();
-				} else {
-					throw new Error("Failed to fetch posts.");
-				}
-			})
-			.then((postData) => {
-				setData(postData);
-			})
-			.catch((error) => {
-				console.error("Error fetching posts:", error);
-			});
-	};
-
-	const fetchLikedPosts = () => {
-		fetch(FAVORITE_POSTS_ENDPOINT, {
-			method: "GET",
-			headers: {
-				Authorization: `Token ${localStorage.getItem("authToken")}`,
-			},
-		})
-			.then((response) => {
-				if (response.status === 200) {
-					return response.json();
-				} else {
-					throw new Error("Failed to fetch liked posts.");
-				}
-			})
-			.then((data) => {
-				const likedPostIds = data.map((post: Posts) => post.id);
-				setLikedPosts(likedPostIds);
-			})
-			.catch((error) => {
-				console.error("Error fetching liked posts:", error);
-			});
-	};
-
+	// check if user is logged in, else boot them to login page
 	useEffect(() => {
 		fetch("http://127.0.0.1:8000/api/check-auth/", {
 			method: "GET",
@@ -82,19 +34,28 @@ function Home() {
 		})
 			.then((response) => {
 				if (response.status !== 200) {
-					navigate("/");
+					navigate("/")
 				}
 			})
 			.catch((error) => {
-				console.error("Error:", error);
-			});
+				console.error("Error:", error)
+			})
 
-		fetchPosts();
-	}, [navigate]);
-
-	useEffect(() => {
-		fetchLikedPosts();
-	}, []);
+		fetch("http://127.0.0.1:8000/api/favorite-posts/", {
+			method: "GET",
+			headers: {
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+			},
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				setData(data)
+				setLikedPosts(data.map((post: Posts) => post.id))
+			})
+			.catch((error) => {
+				console.error("Error fetching data:", error)
+			})
+	}, [navigate, likedPosts])
 
 	function homeSearchPosts(newSearch: string) {
 		setSearch(newSearch)
@@ -131,11 +92,19 @@ function Home() {
 			})
 	}
 	return (
-    <>
-      <NavBar icons={3} search={homeSearchPosts} searchHidden={false} />
-      <PostList posts={data} likedPosts={likedPosts} onToggleLike={toggleLike} />
-    </>
-  );
+		<>
+			<NavBar icons={1} search={homeSearchPosts} searchHidden={false} />
+			{data.length > 0 ? (
+				<PostList
+					posts={data}
+					likedPosts={likedPosts}
+					onToggleLike={toggleLike}
+				/>
+			) : (
+				<p className="one-pager-text">You have no favorite spots, make sure to hit the heart icon to mark your favorites!</p>
+			)}
+		</>
+	)
 }
 
-export default Home
+export default Favorites

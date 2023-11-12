@@ -17,7 +17,7 @@ interface PostDetails {
 	creator_email: string
 }
 
-function View() {
+function Create() {
 	const [data, setData] = useState<PostDetails | undefined>()
 	const { id } = useParams()
 	const navigate = useNavigate()
@@ -53,38 +53,35 @@ function View() {
 			<div className="view-container">
 				<div className="col-span-1"></div>
 				<div className="col-span-1 mx-1 overflow-scroll">
-					<div className="col-span-1 flex flex-wrap text-3xl">
-						<p className="font-semibold lg:whitespace-nowrap mr-2">
-							{data?.location}
-						</p>
-						<p className="font-light text-gray-400 lg:whitespace-nowrap">
-							{data?.spots} {data?.spots == 1 ? "spot" : "spots"} available
-						</p>
-					</div>
-					<h2 className="font-semibold mt-3 text-2xl">
-						${data?.price} <span className="font-light">month</span>
-					</h2>
-					<div className="h-[20vh] max-h-30">
-						<p className="body-text">{data?.description}</p>
-					</div>
 
-          {/* User contact data */}
-					<h2 className="font-semibold mt-3 text-2xl">Seller Information</h2>
-					<p className="body-text">Johnny Appleseed</p>
-					<p className="body-text">{data?.creator_email}</p>
+          {/* Location */}
+          <div className="mx-1">
+							<label
+								htmlFor="location"
+								className="block text-sm font-medium leading-6 text-gray-900"
+							>
+								Location
+							</label>
+							<div className="mt-2">
+								<input
+									id="location"
+									name="location"
+									type="text"
+									maxLength={70}
+									required
+									className="register-input-style w-full"
+								/>
+							</div>
+						</div>
 					<br />
 					<br />
           {/* Send email to seller expressing interest and providing buyer's email for further contact */}
 					<button
 						type="button"
 						className="contact-button"
-						onClick={() =>
-							alert(
-								`An email has been sent to ${data?.creator_email} expressing your interest in their parking spot!`
-							)
-						}
+						onClick={() => {}}
 					>
-						Contact
+						Create
 					</button>
 				</div>
 			</div>
@@ -92,4 +89,4 @@ function View() {
 	)
 }
 
-export default View
+export default Create

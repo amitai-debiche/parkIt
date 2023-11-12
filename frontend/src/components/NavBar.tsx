@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import "../index.css"
 
 interface NavProps {
-  // Determine which icons to show on top right
+	// Determine which icons to show on top right
 	// 1 - Add/Logout, 2 - Favorites/Logout, 3 - Add/Favorites/Logout
 	icons: 1 | 2 | 3
 	search: (newSearch: string) => void
@@ -16,7 +16,7 @@ interface NavProps {
 function NavBar(props: NavProps) {
 	const navigate = useNavigate()
 
-  // logout and go back to login screen post
+	// logout and go back to login screen post
 	function logout() {
 		fetch("http://127.0.0.1:8000/api/logout/", {
 			method: "POST",
@@ -33,7 +33,7 @@ function NavBar(props: NavProps) {
 				}
 			})
 			.then(() => {
-        // remove important items
+				// remove important items
 				localStorage.removeItem("authToken")
 				localStorage.removeItem("userId")
 			})
@@ -98,7 +98,11 @@ function NavBar(props: NavProps) {
 						</>
 					) : props.icons === 2 ? (
 						<>
-							<button type="button" className="nav-button">
+							<button
+								type="button"
+								className="nav-button hover:text-red-500"
+								onClick={() => navigate("/favorites")}
+							>
 								<HeartIcon className="h-6 w-6" aria-hidden="true" />
 							</button>
 							<button type="button" className="nav-button" onClick={logout}>
@@ -110,7 +114,11 @@ function NavBar(props: NavProps) {
 							<button type="button" className="nav-button">
 								<PlusIcon className="h-6 w-6" aria-hidden="true" />
 							</button>
-							<button type="button" className="nav-button">
+							<button
+								type="button"
+								className="nav-button hover:text-red-500"
+								onClick={() => navigate("/favorites")}
+							>
 								<HeartIcon className="h-6 w-6" aria-hidden="true" />
 							</button>
 							<button type="button" className="nav-button" onClick={logout}>

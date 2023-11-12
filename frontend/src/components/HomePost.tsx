@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom"
+
 import "../index.css"
 
 interface HomePost {
@@ -8,12 +10,18 @@ interface HomePost {
 	id: number
 }
 function HomePost(props: HomePost) {
+	const navigate = useNavigate()
+	function onClickNavigate(postId: number) {
+		navigate(`/view/${postId}/`)
+	}
 	return (
-		<div className="home-post-container">
-      {/* image box */}
+		<div onClick={() => onClickNavigate(props.id)}>
+			{/* image box */}
 			<div className="home-post-box"></div>
+
 			<br />
-      {/* descriptor text */}
+
+			{/* descriptor text */}
 			<p className="font-semibold">{props.location}</p>
 			<p className="font-light">
 				{props.spots} {props.spots == 1 ? "spot" : "spots"} available
