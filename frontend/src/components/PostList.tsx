@@ -22,7 +22,7 @@ const PostList: React.FC<Props> = ({ posts, likedPosts, onToggleLike }) => {
 	return (
 		<div className="home-grid">
 			{posts.map((post) => (
-				<div key={post.id} className="home-post-container">
+				<div key={post.id} className="home-post-container p-0">
 					<div className="hover:cursor-pointer relative">
 						<div className="heart-icon">
 							<button

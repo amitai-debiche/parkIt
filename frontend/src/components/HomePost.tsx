@@ -19,7 +19,7 @@ function HomePost(props: HomePost) {
 		<div onClick={() => onClickNavigate(props.id)}>
 			{/* image box */}
 			<div
-				className="home-post-box"
+				className="home-post-box rounded-lg"
 				style={{
 					backgroundImage: `url(${props.images})`, // Set the image as a background
 					backgroundSize: "cover", // Cover the entire container
@@ -30,6 +30,7 @@ function HomePost(props: HomePost) {
 			<br />
 
 			{/* descriptor text */}
+      <div className="pl-2 pb-2">
 			<p className="font-semibold">{props.location}</p>
 			<p className="font-light">
 				{props.spots} {props.spots == 1 ? "spot" : "spots"} available
@@ -37,6 +38,8 @@ function HomePost(props: HomePost) {
 			<p className="font-semibold">
 				${props.price} <span className="font-light">month</span>
 			</p>
+      </div>
+
 		</div>
 	)
 }
