@@ -11,7 +11,7 @@ class FavoritePostSerializer(serializers.ModelSerializer):
     post = PostSerializer()
     class Meta:
         model = models.FavoritePost
-        fields = ['post']
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
