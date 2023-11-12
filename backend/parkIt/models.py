@@ -8,6 +8,13 @@ from django.contrib.auth.models import User
 # first, last, password, email,
 #
 
+class FavoritePost(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+
+    def __str__(self):
+         return f"{self.user.username}'s Favorite: {self.post.location}"
+    
 
 class Post(models.Model):
     # Creator temporarily a name, should change to more unique id per user

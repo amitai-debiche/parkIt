@@ -7,10 +7,18 @@ class PostSerializer(serializers.ModelSerializer):
         model = models.Post
         fields = '__all__'
 
+class FavoritePostSerializer(serializers.ModelSerializer):
+    post = PostSerializer()
+    class Meta:
+        model = models.FavoritePost
+        fields = ['post']
+
+
 class UserSerializer(serializers.ModelSerializer):
+    favorite_posts = FavoritePostSerializer(many = True, read_only=True)
     class Meta:
         model = User
-        fields = ['username', 'password', 'email']
+        fields = ['username', 'password', 'email', 'favorite_posts']
         extra_kwargs = {'password' : {'write_only':True}}
 
     def create(self, validated_data):
