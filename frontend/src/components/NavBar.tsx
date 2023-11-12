@@ -89,7 +89,8 @@ function NavBar(props: NavProps) {
 				<div className="nav-button-container">
 					{props.icons === 1 ? (
 						<>
-							<button type="button" className="nav-button">
+							<button type="button" className="nav-button" onClick={() => navigate("/create")}
+>
 								<PlusIcon className="h-6 w-6" aria-hidden="true" />
 							</button>
 							<button type="button" className="nav-button" onClick={logout}>
@@ -111,7 +112,7 @@ function NavBar(props: NavProps) {
 						</>
 					) : (
 						<>
-							<button type="button" className="nav-button">
+							<button type="button" className="nav-button" onClick={() => navigate("/create")}>
 								<PlusIcon className="h-6 w-6" aria-hidden="true" />
 							</button>
 							<button

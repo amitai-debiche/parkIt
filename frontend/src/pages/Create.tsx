@@ -1,5 +1,5 @@
 import NavBar from "../components/NavBar.tsx"
-import { FormEvent, useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { PhotoIcon } from "@heroicons/react/20/solid"
@@ -9,21 +9,31 @@ import "../index.css"
 function Create() {
 	const { id } = useParams()
 	const navigate = useNavigate()
-  const [postData, setPostData] = useState({
-    location: '',  
-    spots: 0,
-    price: 0,
-  })
-  const [selectedImage, setSelectedImage] = useState<string | null>(null) // Initialize with null
+	const [postData, setPostData] = useState({
+		location: "",
+		spots: 0,
+		price: 0,
+		description: "",
+	})
+
+	const [selectedImage, setSelectedImage] = useState<File>() // Initialize with null
 
 	// Function to handle file input change
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files ? e.target.files[0] : null
-
+    
 		if (file) {
 			// Display the selected image
-			setSelectedImage(URL.createObjectURL(file))
+			setSelectedImage(file)
 		}
+	}
+
+  const handlePostFormChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+		const { name, value } = e.target
+		setPostData({
+			...postData,
+			[name]: value,
+		})
 	}
 
 	// check if user is logged in, else boot to login page
@@ -42,42 +52,35 @@ function Create() {
 			.catch(() => {})
 	}, [id, navigate])
 
-  const handleCreate = (e: FormEvent) => {
-    e.preventDefault()
+	const handleCreate = (e: FormEvent) => {
+		e.preventDefault()
+    const formData = new FormData();
+    console.log(formData)
+    formData.append("location", postData.location);
+    formData.append("spots", postData.spots.toString());
+    formData.append("price", postData.price.toString());
+    formData.append("description", postData.description);
+    if (selectedImage) formData.append("images", selectedImage);
 
-    const locationInput = document.getElementById("location") as HTMLInputElement;
-    const spotsInput = document.getElementById("spots") as HTMLInputElement;
-    const priceInput = document.getElementById("price") as HTMLInputElement;
-    //const descriptionInput = document.getElementById("description") as HTMLInputElement;
-
-    // Update the postData object with the input values
-    setPostData({
-      location: locationInput.value,
-      spots: parseInt(spotsInput.value),
-      price: parseFloat(priceInput.value),
-    });
-
-    fetch("http://127.0.0.1:8000/api/posts/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    })
-      .then((response) => {
-        if (response.status === 201) {
-          return response.json()
-        } else {
-          alert("Either your post could not be created.")
-        }
-      })
-      .then(() => {
-        navigate("/home")
-      })
-      .catch((error) => {
-        console.error("Error:", error)
-      })
-  }
+		fetch("http://127.0.0.1:8000/api/posts/", {
+			method: "POST",
+			headers: {
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+			},
+			body: formData,
+		})
+			.then((response) => {
+				if (response.status === 201) {
+					navigate("/home")
+					return response.json()
+				} else {
+					alert("Either your post could not be created.")
+				}
+			})
+			.catch((error) => {
+				console.error("Error:", error)
+			})
+	}
 
 	return (
 		<>
@@ -96,7 +99,7 @@ function Create() {
 							<div className="text-center">
 								{selectedImage ? (
 									<img
-										src={selectedImage}
+										src={URL.createObjectURL(selectedImage)}
 										alt="Selected"
 										className="mx-auto h-full max-h-[70vh] w-auto self-center"
 									/>
@@ -146,6 +149,7 @@ function Create() {
 								name="location"
 								type="text"
 								maxLength={70}
+                onChange={handlePostFormChange}
 								required
 								className="register-input-style w-full"
 							/>
@@ -165,6 +169,8 @@ function Create() {
 								id="description"
 								name="description"
 								rows={3}
+                onChange={handlePostFormChange}
+
 								className="pl-2 block w-full rounded-md border-2 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 								defaultValue={""}
 							/>
@@ -192,6 +198,7 @@ function Create() {
 									name="price"
 									type="number"
 									max={1000}
+                  onChange={handlePostFormChange}
 									required
 									className="register-input-style w-full"
 								/>
@@ -210,6 +217,7 @@ function Create() {
 									name="spots"
 									type="number"
 									max={1000}
+                  onChange={handlePostFormChange}
 									required
 									className="register-input-style w-full"
 								/>
@@ -219,7 +227,11 @@ function Create() {
 					<br />
 					<br />
 					{/* Send email to seller expressing interest and providing buyer's email for further contact */}
-					<button type="submit" className="contact-button" onClick={handleCreate}>
+					<button
+						type="submit"
+						className="contact-button"
+						onClick={handleCreate}
+					>
 						Create
 					</button>
 				</div>

@@ -112,7 +112,6 @@ function View() {
 
 					{/* User contact data */}
 					<h2 className="font-semibold mt-3 text-2xl">Seller Information</h2>
-					<p className="body-text">Johnny Appleseed</p>
 					<p className="body-text">{data?.creator_email}</p>
 					<br />
 					<br />
