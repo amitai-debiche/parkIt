@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import "../index.css"
 
 interface NavProps {
+  // Determine which icons to show on top right
 	// 1 - Add/Logout, 2 - Favorites/Logout, 3 - Add/Favorites/Logout
 	icons: 1 | 2 | 3
 	search: (newSearch: string) => void
@@ -13,13 +14,14 @@ interface NavProps {
 }
 
 function NavBar(props: NavProps) {
-  const navigate = useNavigate()
+	const navigate = useNavigate()
 
-  function logout() {
-    fetch("http://127.0.0.1:8000/api/logout/", {
+  // logout and go back to login screen post
+	function logout() {
+		fetch("http://127.0.0.1:8000/api/logout/", {
 			method: "POST",
 			headers: {
-        "Authorization": `Token ${localStorage.getItem("authToken")}`,
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
 				"Content-Type": "application/json",
 			},
 		})
@@ -27,19 +29,18 @@ function NavBar(props: NavProps) {
 				if (response.status === 200) {
 					navigate("/")
 				} else {
-					alert(
-						"Your logout could not complete."
-					)
+					alert("Your logout could not complete.")
 				}
 			})
 			.then(() => {
+        // remove important items
 				localStorage.removeItem("authToken")
 				localStorage.removeItem("userId")
 			})
 			.catch((error) => {
 				console.error("Error:", error)
 			})
-  }
+	}
 
 	return (
 		<div className="nav-container">
@@ -84,7 +85,7 @@ function NavBar(props: NavProps) {
 					</div>
 				)}
 
-				{/* buttons */}
+				{/* different button combinations as noted above in interface */}
 				<div className="nav-button-container">
 					{props.icons === 1 ? (
 						<>

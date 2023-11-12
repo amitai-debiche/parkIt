@@ -10,8 +10,10 @@ interface HomePost {
 function HomePost(props: HomePost) {
 	return (
 		<div className="home-post-container">
+      {/* image box */}
 			<div className="home-post-box"></div>
 			<br />
+      {/* descriptor text */}
 			<p className="font-semibold">{props.location}</p>
 			<p className="font-light">
 				{props.spots} {props.spots == 1 ? "spot" : "spots"} available

@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom"
 
 import "../index.css"
 
-interface FormData {
+interface RegisterData {
 	username: string
 	email: string
 	password: string
 	confirmPassword: string
 }
 function Register() {
-	const [formData, setFormData] = useState<FormData>({
+	const [registerData, setFormData] = useState<RegisterData>({
 		username: "",
 		email: "",
 		password: "",
@@ -19,33 +19,31 @@ function Register() {
 	const [passwordsMatch, setPasswordsMatch] = useState(false)
 	const navigate = useNavigate()
 
-	const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
+	const handleRegisterFormChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
 		setFormData({
-			...formData,
+			...registerData,
 			[name]: value,
 		})
 	}
 
 	useEffect(() => {
-		// Check if the passwords match whenever formData or confirmPassword changes
-		setPasswordsMatch(formData.password === formData.confirmPassword)
-	}, [formData, formData.confirmPassword, passwordsMatch])
+		setPasswordsMatch(registerData.password === registerData.confirmPassword)
+	}, [registerData, registerData.confirmPassword, passwordsMatch])
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleRegisterSubmit = (e: FormEvent) => {
 		e.preventDefault()
 		if (!passwordsMatch) {
-			// Passwords don't match, display an error message to the user
 			alert("Passwords do not match. Please make sure they match.")
 			return
 		}
-		// Continue with form submission
+    // register user if passwords match
 		fetch("http://127.0.0.1:8000/api/register/", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(formData),
+			body: JSON.stringify(registerData),
 		})
 			.then((response) => {
 				if (response.status === 201) {
@@ -57,12 +55,13 @@ function Register() {
 				}
 			})
 			.then((data) => {
+        // set important values locally
 				const token = data.token
 				const userId = data.user_id
 
 				localStorage.setItem("authToken", token)
 				localStorage.setItem("userId", userId)
-        
+
 				navigate("/home")
 			})
 			.catch((error) => {
@@ -76,7 +75,7 @@ function Register() {
 
 			<div className="register-form-container">
 				<div className="register-form-style">
-					<form className="space-y-6" onSubmit={handleSubmit}>
+					<form className="space-y-6" onSubmit={handleRegisterSubmit}>
 						{/* Email */}
 						<div>
 							<label
@@ -94,7 +93,7 @@ function Register() {
 									maxLength={40}
 									required
 									className="register-input-style"
-									onChange={handleFormChange}
+									onChange={handleRegisterFormChange}
 								/>
 							</div>
 						</div>
@@ -102,7 +101,7 @@ function Register() {
 						{/* Username */}
 						<div>
 							<label
-								htmlFor="email"
+								htmlFor="username"
 								className="block text-sm font-medium leading-6 text-gray-900"
 							>
 								Username
@@ -115,7 +114,7 @@ function Register() {
 									maxLength={15}
 									required
 									className="register-input-style"
-									onChange={handleFormChange}
+									onChange={handleRegisterFormChange}
 								/>
 							</div>
 						</div>
@@ -137,7 +136,7 @@ function Register() {
 									maxLength={15}
 									required
 									className="register-input-style"
-									onChange={handleFormChange}
+									onChange={handleRegisterFormChange}
 								/>
 							</div>
 						</div>
@@ -145,7 +144,7 @@ function Register() {
 						{/* Confirm Password */}
 						<div>
 							<label
-								htmlFor="password"
+								htmlFor="confirmPassword"
 								className="block text-sm font-medium leading-6 text-gray-900"
 							>
 								Confirm Password
@@ -158,14 +157,14 @@ function Register() {
 									maxLength={15}
 									required
 									className="register-input-style"
-									onChange={handleFormChange}
+									onChange={handleRegisterFormChange}
 								/>
 							</div>
 						</div>
 
 						<div>
 							<button type="submit" className="register-button">
-								Sign in
+								Sign up
 							</button>
 						</div>
 					</form>
