@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "../index.css"
 
+// make sure data is array of posts with post fields
 interface Data extends Array<Posts> {}
 
+// backend post fields
 export interface Posts {
 	id: number
 	location: string
@@ -21,8 +23,23 @@ function Home() {
 	const [search, setSearch] = useState("")
 	const navigate = useNavigate()
 
+	// check if user is logged in, else boot them to login page
 	useEffect(() => {
-		// Replace 'api_url' with the actual URL of your Django API endpoint
+		fetch("http://127.0.0.1:8000/api/check-auth/", {
+			method: "GET",
+			headers: {
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+			},
+		})
+			.then((response) => {
+				if (response.status !== 200) {
+					navigate("/")
+				}
+			})
+			.catch((error) => {
+				console.error("Error:", error)
+			})
+
 		fetch("http://127.0.0.1:8000/api/posts/")
 			.then((response) => response.json())
 			.then((data) => {
@@ -31,14 +48,14 @@ function Home() {
 			.catch((error) => {
 				console.error("Error fetching data:", error)
 			})
-	}, [])
+	}, [navigate])
 
 	function homeSearchPosts(newSearch: string) {
 		setSearch(newSearch)
 	}
 
+	// go to specific post view page
 	function onClickNavigate(postId: number) {
-		// You can specify the URL or path you want to navigate to here
 		navigate(`/view/${postId}/`)
 	}
 
@@ -46,6 +63,7 @@ function Home() {
 		<>
 			<NavBar icons={3} search={homeSearchPosts} searchHidden={false} />
 
+			{/* search filter */}
 			<div className="home-grid">
 				{data
 					.filter((post) =>
@@ -56,6 +74,7 @@ function Home() {
 							<div
 								className="hover:cursor-pointer"
 								onClick={() => onClickNavigate(post.id)}
+								key={post.id}
 							>
 								<HomePost
 									location={post.location}
@@ -63,7 +82,6 @@ function Home() {
 									price={post.price}
 									creator={post.creator}
 									id={post.id}
-									key={post.id}
 								/>
 							</div>
 						)
