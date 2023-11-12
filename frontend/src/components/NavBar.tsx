@@ -1,22 +1,53 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid"
+import { MagnifyingGlassIcon, PowerIcon } from "@heroicons/react/20/solid"
 import { PlusIcon, HeartIcon } from "@heroicons/react/24/outline"
 import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+
 import "../index.css"
 
 interface NavProps {
-	// 1 - Add, 2 - Favorites, 3 - both
+  // Determine which icons to show on top right
+	// 1 - Add/Logout, 2 - Favorites/Logout, 3 - Add/Favorites/Logout
 	icons: 1 | 2 | 3
 	search: (newSearch: string) => void
 	searchHidden: boolean
 }
 
 function NavBar(props: NavProps) {
+	const navigate = useNavigate()
+
+  // logout and go back to login screen post
+	function logout() {
+		fetch("http://127.0.0.1:8000/api/logout/", {
+			method: "POST",
+			headers: {
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+				"Content-Type": "application/json",
+			},
+		})
+			.then((response) => {
+				if (response.status === 200) {
+					navigate("/")
+				} else {
+					alert("Your logout could not complete.")
+				}
+			})
+			.then(() => {
+        // remove important items
+				localStorage.removeItem("authToken")
+				localStorage.removeItem("userId")
+			})
+			.catch((error) => {
+				console.error("Error:", error)
+			})
+	}
+
 	return (
 		<div className="nav-container">
 			<div className="nav-align">
 				{/* parkIt logo */}
 				<div className="title-container">
-					<Link to="/">
+					<Link to="/home">
 						<h1 className="font-semibold text-4xl">parkIt</h1>
 					</Link>
 				</div>
@@ -54,16 +85,26 @@ function NavBar(props: NavProps) {
 					</div>
 				)}
 
-				{/* buttons */}
+				{/* different button combinations as noted above in interface */}
 				<div className="nav-button-container">
 					{props.icons === 1 ? (
-						<button type="button" className="nav-button">
-							<PlusIcon className="h-6 w-6" aria-hidden="true" />
-						</button>
+						<>
+							<button type="button" className="nav-button">
+								<PlusIcon className="h-6 w-6" aria-hidden="true" />
+							</button>
+							<button type="button" className="nav-button" onClick={logout}>
+								<PowerIcon className="h-6 w-6" aria-hidden="true" />
+							</button>
+						</>
 					) : props.icons === 2 ? (
-						<button type="button" className="nav-button">
-							<HeartIcon className="h-6 w-6" aria-hidden="true" />
-						</button>
+						<>
+							<button type="button" className="nav-button">
+								<HeartIcon className="h-6 w-6" aria-hidden="true" />
+							</button>
+							<button type="button" className="nav-button" onClick={logout}>
+								<PowerIcon className="h-6 w-6" aria-hidden="true" />
+							</button>
+						</>
 					) : (
 						<>
 							<button type="button" className="nav-button">
@@ -71,6 +112,9 @@ function NavBar(props: NavProps) {
 							</button>
 							<button type="button" className="nav-button">
 								<HeartIcon className="h-6 w-6" aria-hidden="true" />
+							</button>
+							<button type="button" className="nav-button" onClick={logout}>
+								<PowerIcon className="h-6 w-6" aria-hidden="true" />
 							</button>
 						</>
 					)}
