@@ -103,12 +103,10 @@ class PostList(APIView):
 
         # Create a mutable copy of the QueryDict
         mutable_data = request.data.copy()
-        print
         # Modify the mutable copy
-        mutable_data['creator'] = user.id   
+        mutable_data['creator'] = user.id
 
-        serializer = PostSerializer(data=self.request.data)
-
+        serializer = PostSerializer(data=mutable_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
