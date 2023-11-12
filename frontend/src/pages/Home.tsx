@@ -40,7 +40,12 @@ function Home() {
 				console.error("Error:", error)
 			})
 
-		fetch("http://127.0.0.1:8000/api/posts/")
+		fetch("http://127.0.0.1:8000/api/posts/", {
+			method: "GET",
+			headers: {
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+			},
+		})
 			.then((response) => response.json())
 			.then((data) => {
 				setData(data)
