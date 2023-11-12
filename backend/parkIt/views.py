@@ -14,6 +14,8 @@ from django.contrib.auth.models import User
 from parkIt.serializers import PostSerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.middleware.csrf import get_token
+
 
 
 from parkIt.models import Post
@@ -28,7 +30,10 @@ class LoginView(ObtainAuthToken):
         user = serializer.validated_data['user']
         login(request, user)
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key, 'user_id': user.id})
+        
+        csrf_token = get_token(request)
+
+        return Response({'csrf_token' : csrf_token,'token': token.key, 'user_id': user.id})
 
 
 class LogoutView(APIView):
