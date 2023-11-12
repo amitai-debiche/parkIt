@@ -12,6 +12,7 @@ urlpatterns = [
     path('check-auth/', views.CheckAuthView.as_view(), name='check-auth'),
     path('get-csrf-token/', views.GetCsrf.as_view(), name='get_csrf_token'),
     path('toggle-favorite/<int:post_id>/', views.ToggleFavoritePostView.as_view(), name='toggle-favorite'),
-     path('favorite-posts/', views.FavoritePostListView.as_view(), name='favorite-posts'),
+    path('favorite-posts/', views.FavoritePostListView.as_view(), name='favorite-posts'),
+    path('send-email/<int:post_id>/', views.ContactEmailView.as_view(), name='send-email'),
 ]
 

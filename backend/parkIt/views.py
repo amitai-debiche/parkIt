@@ -17,6 +17,7 @@ from django.middleware.csrf import get_token
 
 from parkIt.serializers import PostSerializer, UserSerializer, FavoritePostSerializer
 from parkIt.models import Post, FavoritePost
+from .utils import send_contact_email
 
 class GetCsrf(APIView):
 
@@ -153,12 +154,30 @@ class ToggleFavoritePostView(APIView):
             return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
         
 class FavoritePostListView(APIView):
-    serializer = FavoritePostSerializer()
+    serializer_class = FavoritePostSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         favorite_posts = FavoritePost.objects.filter(user=self.request.user)
 
-        serializer = FavoritePostSerializer(favorite_posts, many=True)
+        serializer = self.serializer_class(favorite_posts, many=True)
         return Response(serializer.data)
+    
+
+class ContactEmailView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, post_id):
+        post = Post.objects.get(pk=post_id)
+
+        creator_email = post.creator_email
+
+        user = self.request.user
+        user_email = user.email
+
+        send_contact_email(post, creator_email, user_email)
+
+        return Response({'status': 'success'}, status=status.HTTP_200_OK)
+
