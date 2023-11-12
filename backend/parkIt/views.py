@@ -101,7 +101,11 @@ class PostList(APIView):
         
         user = self.request.user
 
-        request.data['creator'] = user.id
+        # Create a mutable copy of the QueryDict
+        mutable_data = request.data.copy()
+
+        # Modify the mutable copy
+        mutable_data['creator'] = user.id   
 
         serializer = PostSerializer(data=self.request.data)
 
