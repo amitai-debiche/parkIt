@@ -14,6 +14,8 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
+from django.db.models import F
+
 
 from parkIt.serializers import PostSerializer, UserSerializer, FavoritePostSerializer
 from parkIt.models import Post, FavoritePost
@@ -160,9 +162,12 @@ class FavoritePostListView(APIView):
 
     def get(self, request):
         favorite_posts = FavoritePost.objects.filter(user=self.request.user)
-
         serializer = self.serializer_class(favorite_posts, many=True)
-        return Response(serializer.data)
+
+        # Flatten the structure to directly get the data inside the 'post' field
+        flattened_data = [item['post'] for item in serializer.data]
+
+        return Response(flattened_data)
     
 
 class ContactEmailView(APIView):
