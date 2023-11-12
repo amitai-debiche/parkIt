@@ -84,6 +84,8 @@ class GetRoutes(APIView):
 
 class PostList(APIView):
 
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         #search_query = request.GET.get('search') if request.GET.get('search') != None else ''
 
@@ -94,15 +96,11 @@ class PostList(APIView):
     
     def post(self, request):
         
-        user_id = request.data.get('user_id', None)
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({'error': 'User not found.'}, status=status.HTTP_400_BAD_REQUEST)
+        user = self.request.user
 
         request.data['creator'] = user.id
 
-        serializer = PostSerializer(data=request.data)
+        serializer = PostSerializer(data=self.request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -159,5 +157,8 @@ class FavoritePostListView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return FavoritePost.objects.filter(user=self.request.user)
+    def get(self, request):
+        favorite_posts = FavoritePost.objects.filter(user=self.request.user)
+
+        serializer = FavoritePostSerializer(favorite_posts, many=True)
+        return Response(serializer.data)
