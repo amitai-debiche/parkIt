@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import "../index.css"
 
 interface HomePost {
+	images: string
 	location: string
 	spots: number
 	price: number
@@ -17,7 +18,11 @@ function HomePost(props: HomePost) {
 	return (
 		<div onClick={() => onClickNavigate(props.id)}>
 			{/* image box */}
-			<div className="home-post-box"></div>
+			<div className="home-post-box" style={{
+				backgroundImage: `url(${props.images})`, // Set the image as a background
+				backgroundSize: "cover", // Cover the entire container
+				backgroundPosition: "center", // Center the image
+			  }}></div>
 
 			<br />
 

@@ -15,6 +15,7 @@ interface PostDetails {
 	created: string
 	creator: number
 	creator_email: string
+	images: number
 }
 
 function View() {
@@ -46,13 +47,54 @@ function View() {
 			})
 	}, [id, navigate])
 
-	return (
+	// Function to handle contact button click
+	// Function to handle contact button click
+	const handleContactButtonClick = () => {
+		// Make a POST request to the specified endpoint
+		fetch(`http://127.0.0.1:8000/api/send-email/${id}/`, {
+		  method: "POST",
+		  headers: {
+			"Content-Type": "application/json",
+			Authorization: `Token ${localStorage.getItem("authToken")}`,
+		  },
+		  // You can include a request body if needed
+		  // body: JSON.stringify({ /* your data here */ }),
+		})
+		  .then((response) => {
+			if (response.status === 200) {
+			  // Handle success, e.g., show a success message
+			  alert(
+				`An email has been sent to ${data?.creator_email} expressing your interest in their parking spot!`
+			  );
+			} else {
+			  // Handle other status codes
+			  alert("Error sending contact request");
+			}
+		  })
+		  .catch((error) => {
+			console.error("Error sending contact request:", error);
+		  });
+	  };
+
+	  return (
 		<>
 			<NavBar icons={3} search={() => {}} searchHidden={true} />
       {/* image view on one side, data on the other */}
 			<div className="view-container">
-				<div className="col-span-1"></div>
-				<div className="col-span-1 mx-1 overflow-scroll">
+				<div className="col-span-1">
+					{data?.images && (
+            		<img
+              		src={`http://127.0.0.1:8000${data.images}`}
+              		alt={data.location}
+					style={{
+						width: '100%',  // Set width to 100% of the parent container
+						height: 'auto',  // Maintain the aspect ratio
+						objectFit: 'cover',
+					  }}
+            	/>
+          	)}
+				</div>
+				<div className="col-span-1 overflow-scroll">
 					<div className="col-span-1 flex flex-wrap text-3xl">
 						<p className="font-semibold lg:whitespace-nowrap mr-2">
 							{data?.location}
@@ -78,11 +120,8 @@ function View() {
 					<button
 						type="button"
 						className="contact-button"
-						onClick={() =>
-							alert(
-								`An email has been sent to ${data?.creator_email} expressing your interest in their parking spot!`
-							)
-						}
+						onClick= {handleContactButtonClick}
+						
 					>
 						Contact
 					</button>

@@ -50,7 +50,7 @@
 	}
 
 	.home-post-box {
-		@apply w-[296px] h-[296px];
+		@apply w-full h-[40vh];
 	}
 
 	.home-grid {

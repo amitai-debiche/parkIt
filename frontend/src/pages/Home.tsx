@@ -16,6 +16,7 @@ export interface Posts {
 	price: number
 	created: string
 	creator: number
+	images: string
 }
 
 const API_BASE_URL = "http://127.0.0.1:8000/api";
@@ -43,7 +44,13 @@ function Home() {
 				}
 			})
 			.then((postData) => {
-				setData(postData);
+				const postsWithImages = postData.map((post: Posts) => {
+					return {
+						...post,
+						images: `http://127.0.0.1:8000${post.images}/`, // Change this to the actual URL or path to your images
+					};
+				});
+				setData(postsWithImages);
 			})
 			.catch((error) => {
 				console.error("Error fetching posts:", error);
