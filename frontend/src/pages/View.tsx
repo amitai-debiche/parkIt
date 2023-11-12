@@ -15,6 +15,7 @@ interface PostDetails {
 	created: string
 	creator: number
 	creator_email: string
+	images: number
 }
 
 function View() {
@@ -75,7 +76,7 @@ function View() {
 		  });
 	  };
 
-	return (
+	  return (
 		<>
 			<NavBar icons={3} search={() => {}} searchHidden={true} />
       {/* image view on one side, data on the other */}
@@ -94,8 +95,6 @@ function View() {
           	)}
 				</div>
 				<div className="col-span-1 overflow-scroll">
-				<div className="col-span-1"></div>
-				<div className="col-span-1 mx-1 overflow-scroll">
 					<div className="col-span-1 flex flex-wrap text-3xl">
 						<p className="font-semibold lg:whitespace-nowrap mr-2">
 							{data?.location}
