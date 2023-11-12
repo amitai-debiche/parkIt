@@ -28,6 +28,7 @@ class Post(models.Model):
 
     creator_email = models.EmailField(null=True, blank=True)
     # post_id
+    images = models.ImageField(upload_to='post_images',default='post_images/default_image.jpg')
     #
     class Meta:
         ordering = ['-created']
@@ -40,5 +41,5 @@ class Post(models.Model):
 
     def __str__(self):
         return str(self.location)
-    
+
    

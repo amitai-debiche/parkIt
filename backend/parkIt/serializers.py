@@ -2,6 +2,10 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from . import models
 
+
+
+
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Post
@@ -24,3 +28,5 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+    
+
