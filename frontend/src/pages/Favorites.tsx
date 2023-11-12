@@ -21,7 +21,7 @@ export interface Posts {
 
 function Favorites() {
 	const [data, setData] = useState<Data>([])
-	const [, setSearch] = useState("")
+	const [search, setSearch] = useState("")
 	const [likedPosts, setLikedPosts] = useState<number[]>([])
 	const navigate = useNavigate()
 
@@ -103,7 +103,7 @@ function Favorites() {
 			<NavBar icons={1} search={homeSearchPosts} searchHidden={false} />
 			{data.length > 0 ? (
 				<PostList
-					posts={data}
+          posts={data.filter(post => post.location.toLowerCase().trim().includes(search.toLowerCase()))}
 					likedPosts={likedPosts}
 					onToggleLike={toggleLike}
 				/>

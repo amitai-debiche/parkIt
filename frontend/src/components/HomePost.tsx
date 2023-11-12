@@ -18,11 +18,14 @@ function HomePost(props: HomePost) {
 	return (
 		<div onClick={() => onClickNavigate(props.id)}>
 			{/* image box */}
-			<div className="home-post-box" style={{
-				backgroundImage: `url(${props.images})`, // Set the image as a background
-				backgroundSize: "cover", // Cover the entire container
-				backgroundPosition: "center", // Center the image
-			  }}></div>
+			<div
+				className="home-post-box"
+				style={{
+					backgroundImage: `url(${props.images})`, // Set the image as a background
+					backgroundSize: "cover", // Cover the entire container
+					backgroundPosition: "center", // Center the image
+				}}
+			></div>
 
 			<br />
 

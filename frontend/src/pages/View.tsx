@@ -23,12 +23,12 @@ function View() {
 	const { id } = useParams()
 	const navigate = useNavigate()
 
-  // check if user is logged in, else boot to login page
+	// check if user is logged in, else boot to login page
 	useEffect(() => {
 		fetch("http://127.0.0.1:8000/api/check-auth/", {
 			method: "GET",
 			headers: {
-				"Authorization": `Token ${localStorage.getItem("authToken")}`,
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
 			},
 		})
 			.then((response) => {
@@ -52,47 +52,47 @@ function View() {
 	const handleContactButtonClick = () => {
 		// Make a POST request to the specified endpoint
 		fetch(`http://127.0.0.1:8000/api/send-email/${id}/`, {
-		  method: "POST",
-		  headers: {
-			"Content-Type": "application/json",
-			Authorization: `Token ${localStorage.getItem("authToken")}`,
-		  },
-		  // You can include a request body if needed
-		  // body: JSON.stringify({ /* your data here */ }),
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+			},
+			// You can include a request body if needed
+			// body: JSON.stringify({ /* your data here */ }),
 		})
-		  .then((response) => {
-			if (response.status === 200) {
-			  // Handle success, e.g., show a success message
-			  alert(
-				`An email has been sent to ${data?.creator_email} expressing your interest in their parking spot!`
-			  );
-			} else {
-			  // Handle other status codes
-			  alert("Error sending contact request");
-			}
-		  })
-		  .catch((error) => {
-			console.error("Error sending contact request:", error);
-		  });
-	  };
+			.then((response) => {
+				if (response.status === 200) {
+					// Handle success, e.g., show a success message
+					alert(
+						`An email has been sent to ${data?.creator_email} expressing your interest in their parking spot!`
+					)
+				} else {
+					// Handle other status codes
+					alert("Error sending contact request")
+				}
+			})
+			.catch((error) => {
+				console.error("Error sending contact request:", error)
+			})
+	}
 
-	  return (
+	return (
 		<>
 			<NavBar icons={3} search={() => {}} searchHidden={true} />
-      {/* image view on one side, data on the other */}
+			{/* image view on one side, data on the other */}
 			<div className="view-container">
 				<div className="col-span-1">
 					{data?.images && (
-            		<img
-              		src={`http://127.0.0.1:8000${data.images}`}
-              		alt={data.location}
-					style={{
-						width: '100%',  // Set width to 100% of the parent container
-						height: 'auto',  // Maintain the aspect ratio
-						objectFit: 'cover',
-					  }}
-            	/>
-          	)}
+						<img
+							src={`http://127.0.0.1:8000${data.images}`}
+							alt={data.location}
+							style={{
+								width: "100%", // Set width to 100% of the parent container
+								height: "auto", // Maintain the aspect ratio
+								objectFit: "cover",
+							}}
+						/>
+					)}
 				</div>
 				<div className="col-span-1 overflow-scroll">
 					<div className="col-span-1 flex flex-wrap text-3xl">
@@ -110,18 +110,17 @@ function View() {
 						<p className="body-text">{data?.description}</p>
 					</div>
 
-          {/* User contact data */}
+					{/* User contact data */}
 					<h2 className="font-semibold mt-3 text-2xl">Seller Information</h2>
 					<p className="body-text">Johnny Appleseed</p>
 					<p className="body-text">{data?.creator_email}</p>
 					<br />
 					<br />
-          {/* Send email to seller expressing interest and providing buyer's email for further contact */}
+					{/* Send email to seller expressing interest and providing buyer's email for further contact */}
 					<button
 						type="button"
 						className="contact-button"
-						onClick= {handleContactButtonClick}
-						
+						onClick={handleContactButtonClick}
 					>
 						Contact
 					</button>

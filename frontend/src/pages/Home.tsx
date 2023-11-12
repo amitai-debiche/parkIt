@@ -25,7 +25,7 @@ const FAVORITE_POSTS_ENDPOINT = `${API_BASE_URL}/favorite-posts/`;
 
 function Home() {
 	const [data, setData] = useState<Data>([]);
-	const [, setSearch] = useState("");
+	const [search, setSearch] = useState("");
 	const [likedPosts, setLikedPosts] = useState<number[]>([]);
 	const navigate = useNavigate();
 
@@ -79,7 +79,7 @@ function Home() {
 				console.error("Error fetching liked posts:", error);
 			});
 	};
-
+	
 	useEffect(() => {
 		fetch("http://127.0.0.1:8000/api/check-auth/", {
 			method: "GET",
@@ -140,7 +140,7 @@ function Home() {
 	return (
     <>
       <NavBar icons={3} search={homeSearchPosts} searchHidden={false} />
-      <PostList posts={data} likedPosts={likedPosts} onToggleLike={toggleLike} />
+      <PostList posts={data.filter(post => post.location.toLowerCase().trim().includes(search.toLowerCase()))}likedPosts={likedPosts} onToggleLike={toggleLike} />
     </>
   );
 }
