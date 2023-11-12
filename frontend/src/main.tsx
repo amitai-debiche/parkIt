@@ -4,6 +4,7 @@ import View from "./pages/View.tsx"
 import Home from "./pages/Home.tsx"
 import Auth from "./pages/Auth.tsx"
 import Favorites from "./pages/Favorites.tsx"
+import Create from "./pages/Create.tsx"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 import "./index.css"
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
 		path: "/favorites",
 		element: <Favorites />,
+	},
+  {
+		path: "/create/",
+		element: <Create />,
 	},
 	{
 		path: "/view/:id/",
