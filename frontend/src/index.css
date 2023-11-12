@@ -44,7 +44,6 @@
     @apply relative ml-5 flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none
   }
 
-
   /* Home Post Styling */ 
   .home-post-container {
     @apply p-4 m-5 border shadow-md rounded-lg flex flex-col
@@ -52,5 +51,14 @@
   
   .home-post-box {
     @apply w-[296px] h-[296px]
+  }
+
+  /* Add Page Styling */
+  .add-container {
+    @apply p-4 m-5 border shadow-md rounded-lg flex flex-col
+  }
+
+  .add-box {
+    @apply h-full
   }
 }

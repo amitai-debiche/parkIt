@@ -3,7 +3,9 @@ import { MagnifyingGlassIcon } from "@heroicons/react/20/solid"
 import { PlusIcon, HeartIcon } from "@heroicons/react/24/outline"
 
 interface NavProps {
-  search: (newSearch: string) => void
+  // 1 - Add, 2 - Favorites, 3 - both
+	icons: 1 | 2 | 3
+	search: (newSearch: string) => void
 }
 function NavBar(props: NavProps) {
 	return (
@@ -36,7 +38,7 @@ function NavBar(props: NavProps) {
 									className="search-bar"
 									placeholder="Search"
 									type="search"
-                  onChange={(e) => props.search(e.target.value)}
+									onChange={(e) => props.search(e.target.value)}
 								/>
 							</div>
 						</div>
@@ -45,13 +47,24 @@ function NavBar(props: NavProps) {
 
 				{/* buttons */}
 				<div className="nav-button-container">
-					<button type="button" className="nav-button">
-						<PlusIcon className="h-6 w-6" aria-hidden="true" />
-					</button>
-
-					<button type="button" className="nav-button">
-						<HeartIcon className="h-6 w-6" aria-hidden="true" />
-					</button>
+					{props.icons === 1 ? (
+						<button type="button" className="nav-button">
+							<PlusIcon className="h-6 w-6" aria-hidden="true" />
+						</button>
+					) : props.icons === 2 ? (
+						<button type="button" className="nav-button">
+							<HeartIcon className="h-6 w-6" aria-hidden="true" />
+						</button>
+					) : (
+						<>
+							<button type="button" className="nav-button">
+								<PlusIcon className="h-6 w-6" aria-hidden="true" />
+							</button>
+							<button type="button" className="nav-button">
+								<HeartIcon className="h-6 w-6" aria-hidden="true" />
+							</button>
+						</>
+					)}
 				</div>
 			</div>
 		</div>

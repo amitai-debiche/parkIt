@@ -10,7 +10,6 @@ interface HomePost {
 function HomePost(props: HomePost) {
 
   return (
-    
     <div className="home-post-container">
       <div className="home-post-box"></div>
       <br/>
@@ -18,7 +17,6 @@ function HomePost(props: HomePost) {
       <p className="font-light">{props.spots} {props.spots == 1 ? "spot" : "spots"} available</p>
       <p className="font-semibold">${props.price} <span className="font-light">month</span></p>
     </div>
-    
   )
 }
 

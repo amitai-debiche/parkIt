@@ -1,10 +1,32 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Home from './Home.tsx'
+import View from './pages/View.tsx'
+import Home from './pages/Home.tsx'
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import './index.css'
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home/>,
+  },
+  {
+    path: "/view/:id/",
+    element: <View/>
+  },
+  {
+    path: "*",
+    element: <p className="text-center font-bold justify-center">Page Does Not Exist!</p>
+  },
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Home />
+    <RouterProvider router={router}/>
   </React.StrictMode>,
 )
+
+//<Add id={1} location={'Edu Sci'} description={'Testing'} spots={1} price={20} created={'Yesterday'} creator={1} />
