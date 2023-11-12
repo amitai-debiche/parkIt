@@ -27,7 +27,7 @@ function View() {
 		fetch("http://127.0.0.1:8000/api/check-auth/", {
 			method: "GET",
 			headers: {
-				Authorization: `Token ${localStorage.getItem("authToken")}`,
+				"Authorization": `Token ${localStorage.getItem("authToken")}`,
 			},
 		})
 			.then((response) => {
@@ -94,6 +94,8 @@ function View() {
           	)}
 				</div>
 				<div className="col-span-1 overflow-scroll">
+				<div className="col-span-1"></div>
+				<div className="col-span-1 mx-1 overflow-scroll">
 					<div className="col-span-1 flex flex-wrap text-3xl">
 						<p className="font-semibold lg:whitespace-nowrap mr-2">
 							{data?.location}

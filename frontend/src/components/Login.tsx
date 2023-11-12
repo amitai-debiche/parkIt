@@ -23,7 +23,7 @@ function Login() {
 		})
 	}
 
-  // backend login post
+	// backend login post
 	const handleLoginSubmit = (e: FormEvent) => {
 		e.preventDefault()
 
@@ -42,7 +42,7 @@ function Login() {
 				}
 			})
 			.then((data) => {
-        // store important vars locally
+				// store important vars locally
 				const token = data.token
 				const userId = data.user_id
 
