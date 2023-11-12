@@ -11,15 +11,18 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
-from parkIt.serializers import PostSerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
 
+from parkIt.serializers import PostSerializer, UserSerializer, FavoritePostSerializer
+from parkIt.models import Post, FavoritePost
 
+class GetCsrf(APIView):
 
-from parkIt.models import Post
-
+    def get(request):
+        csrf_token = get_token(request)
+        return Response({'csrf_token': csrf_token})
 
 #LOGIN/LOGOUT/REGISTRATION/CHECK AUTH
 class LoginView(ObtainAuthToken):
@@ -31,9 +34,8 @@ class LoginView(ObtainAuthToken):
         login(request, user)
         token, created = Token.objects.get_or_create(user=user)
         
-        csrf_token = get_token(request)
 
-        return Response({'csrf_token' : csrf_token,'token': token.key, 'user_id': user.id})
+        return Response({'token': token.key, 'user_id': user.id})
 
 
 class LogoutView(APIView):
@@ -66,7 +68,7 @@ class CheckAuthView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response({'authenticated': True, 'username': request.user.username})
+        return Response(status=status.HTTP_200_OK)
 
 
 
@@ -134,4 +136,28 @@ class PostDetail(APIView):
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
 
+class ToggleFavoritePostView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request, post_id):
+
+        try:
+            post = Post.objects.get(pk=post_id)
+            favorite_post, created = FavoritePost.objects.get_or_create(user=request.user, post=post)
+
+            if not created:
+                favorite_post.delete()
+            
+            serializer = FavoritePostSerializer(favorite_post)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Post.DoesNotExist:
+            return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+class FavoritePostListView(APIView):
+    serializer = FavoritePostSerializer()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return FavoritePost.objects.filter(user=self.request.user)

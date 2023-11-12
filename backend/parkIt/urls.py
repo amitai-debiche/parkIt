@@ -10,5 +10,7 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('check-auth/', views.CheckAuthView.as_view(), name='check-auth'),
+    path('get-csrf-token/', views.GetCsrf.as_view(), name='get_csrf_token'),
+    path('toggle-favorite/<int:post_id>/', views.ToggleFavoritePostView.as_view(), name='toggle-favorite'),
 ]
 
