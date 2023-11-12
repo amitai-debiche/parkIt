@@ -12,6 +12,9 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from parkIt.serializers import PostSerializer, UserSerializer
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
 
 from parkIt.models import Post
 
@@ -72,7 +75,6 @@ class GetRoutes(APIView):
         return Response(routes)
 
 
-
 class PostList(APIView):
 
     def get(self, request):
@@ -84,6 +86,7 @@ class PostList(APIView):
         return Response(serializer.data)
     
     def post(self, request):
+        
         user_id = request.data.get('user_id', None)
         try:
             user = User.objects.get(id=user_id)
