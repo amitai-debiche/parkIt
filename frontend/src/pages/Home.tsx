@@ -1,8 +1,8 @@
 import NavBar from "../components/NavBar.tsx"
-import HomePost from "../components/HomePost.tsx"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "../index.css"
+import PostList from "../components/PostList.tsx"
 
 // make sure data is array of posts with post fields
 interface Data extends Array<Posts> {}
@@ -18,12 +18,61 @@ export interface Posts {
 	creator: number
 }
 
-function Home() {
-	const [data, setData] = useState<Data>([])
-	const [search, setSearch] = useState("")
-	const navigate = useNavigate()
+const API_BASE_URL = "http://127.0.0.1:8000/api";
+const POSTS_ENDPOINT = `${API_BASE_URL}/posts/`;
+const FAVORITE_POSTS_ENDPOINT = `${API_BASE_URL}/favorite-posts/`;
 
-	// check if user is logged in, else boot them to login page
+function Home() {
+	const [data, setData] = useState<Data>([]);
+	const [, setSearch] = useState("");
+	const [likedPosts, setLikedPosts] = useState<number[]>([]);
+	const navigate = useNavigate();
+
+	const fetchPosts = () => {
+		fetch(POSTS_ENDPOINT, {
+			method: "GET",
+			headers: {
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+			},
+		})
+			.then((response) => {
+				if (response.status === 200) {
+					return response.json();
+				} else {
+					throw new Error("Failed to fetch posts.");
+				}
+			})
+			.then((postData) => {
+				setData(postData);
+			})
+			.catch((error) => {
+				console.error("Error fetching posts:", error);
+			});
+	};
+
+	const fetchLikedPosts = () => {
+		fetch(FAVORITE_POSTS_ENDPOINT, {
+			method: "GET",
+			headers: {
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+			},
+		})
+			.then((response) => {
+				if (response.status === 200) {
+					return response.json();
+				} else {
+					throw new Error("Failed to fetch liked posts.");
+				}
+			})
+			.then((data) => {
+				const likedPostIds = data.map((post: Posts) => post.id);
+				setLikedPosts(likedPostIds);
+			})
+			.catch((error) => {
+				console.error("Error fetching liked posts:", error);
+			});
+	};
+
 	useEffect(() => {
 		fetch("http://127.0.0.1:8000/api/check-auth/", {
 			method: "GET",
@@ -33,67 +82,60 @@ function Home() {
 		})
 			.then((response) => {
 				if (response.status !== 200) {
-					navigate("/")
+					navigate("/");
 				}
 			})
 			.catch((error) => {
-				console.error("Error:", error)
-			})
+				console.error("Error:", error);
+			});
 
-		fetch("http://127.0.0.1:8000/api/posts/", {
-			method: "GET",
-			headers: {
-				Authorization: `Token ${localStorage.getItem("authToken")}`,
-			},
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				setData(data)
-			})
-			.catch((error) => {
-				console.error("Error fetching data:", error)
-			})
-	}, [navigate])
+		fetchPosts();
+	}, [navigate]);
+
+	useEffect(() => {
+		fetchLikedPosts();
+	}, []);
 
 	function homeSearchPosts(newSearch: string) {
 		setSearch(newSearch)
 	}
 
-	// go to specific post view page
-	function onClickNavigate(postId: number) {
-		navigate(`/view/${postId}/`)
+	function toggleLike(postId: number) {
+		if (likedPosts.some((post) => post === postId)) {
+			// Unlike the post
+			const updatedLikedPosts = likedPosts.filter((post) => post !== postId)
+			setLikedPosts(updatedLikedPosts)
+		} else {
+			// Like the post
+			const updatedLikedPosts = [...likedPosts, postId] // Create a new LikedPost
+			setLikedPosts(updatedLikedPosts)
+		}
+
+		// Send the like/unlike request to your API here
+		// You may need to update the server-side record of liked posts
+		fetch(`http://127.0.0.1:8000/api/toggle-favorite/${postId}/`, {
+			method: "POST",
+			headers: {
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+			},
+		})
+			.then((response) => {
+				if (response.status === 200) {
+					return response.json()
+				} else {
+					alert("Your post could not be liked.")
+				}
+			})
+			.catch((error) => {
+				console.error("Error:", error)
+			})
 	}
-
 	return (
-		<>
-			<NavBar icons={3} search={homeSearchPosts} searchHidden={false} />
-
-			{/* search filter */}
-			<div className="home-grid">
-				{data
-					.filter((post) =>
-						post.location.toLowerCase().includes(search.trim().toLowerCase())
-					)
-					.map((post) => {
-						return (
-							<div
-								className="hover:cursor-pointer"
-								onClick={() => onClickNavigate(post.id)}
-								key={post.id}
-							>
-								<HomePost
-									location={post.location}
-									spots={post.spots}
-									price={post.price}
-									creator={post.creator}
-									id={post.id}
-								/>
-							</div>
-						)
-					})}
-			</div>
-		</>
-	)
+    <>
+      <NavBar icons={3} search={homeSearchPosts} searchHidden={false} />
+      <PostList posts={data} likedPosts={likedPosts} onToggleLike={toggleLike} />
+    </>
+  );
 }
 
 export default Home

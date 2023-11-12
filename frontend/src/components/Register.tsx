@@ -37,7 +37,7 @@ function Register() {
 			alert("Passwords do not match. Please make sure they match.")
 			return
 		}
-    // register user if passwords match
+		// register user if passwords match
 		fetch("http://127.0.0.1:8000/api/register/", {
 			method: "POST",
 			headers: {
@@ -55,7 +55,7 @@ function Register() {
 				}
 			})
 			.then((data) => {
-        // set important values locally
+				// set important values locally
 				const token = data.token
 				const userId = data.user_id
 

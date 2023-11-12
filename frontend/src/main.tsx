@@ -18,11 +18,11 @@ const router = createBrowserRouter([
 		path: "/home",
 		element: <Home />,
 	},
-  {
+	{
 		path: "/favorites",
 		element: <Favorites />,
 	},
-  {
+	{
 		path: "/create/",
 		element: <Create />,
 	},
@@ -32,11 +32,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "*",
-		element: (
-			<p className="mt-[40vh] text-center font-bold justify-center">
-				Page Does Not Exist!
-			</p>
-		),
+		element: <p className="one-pager-text">Page Does Not Exist!</p>,
 	},
 ])
 
