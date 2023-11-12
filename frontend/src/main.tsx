@@ -2,10 +2,15 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import View from "./pages/View.tsx"
 import Home from "./pages/Home.tsx"
+import Register from "./pages/Register.tsx"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import "./index.css"
 
 const router = createBrowserRouter([
+  {
+		path: "/register",
+		element: <Register />,
+	},
 	{
 		path: "/",
 		element: <Home />,
