@@ -78,11 +78,27 @@ class PostList(APIView):
     def get(self, request):
         #search_query = request.GET.get('search') if request.GET.get('search') != None else ''
 
-       
         posts = Post.objects.all()
 
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
+    
+    def post(self, request):
+        user_id = request.data.get('user_id', None)
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        request.data['creator'] = user.id
+
+        serializer = PostSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PostDetail(APIView):
 
