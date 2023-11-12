@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 #Creating
+# first, last, password, email,
+#
+
 
 class Post(models.Model):
     # Creator temporarily a name, should change to more unique id per user
@@ -15,10 +18,18 @@ class Post(models.Model):
     spots = models.IntegerField()
     price = models.FloatField()
     created = models.DateTimeField(auto_now_add = True)
+
+    creator_email = models.EmailField(null=True, blank=True)
     # post_id
     #
     class Meta:
         ordering = ['-created']
+
+    def save(self, *args, **kwargs):
+        # Set creator_email when saving the post
+        if self.creator:
+            self.creator_email = self.creator.email
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.location)
