@@ -190,7 +190,6 @@ class ContactEmailView(APIView):
         post = Post.objects.get(pk=post_id)
 
         creator_email = post.creator_email
-
         user = self.request.user
         user_email = user.email
 
