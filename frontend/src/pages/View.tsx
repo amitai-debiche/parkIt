@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 
 import "../index.css"
+import { TrashIcon } from "@heroicons/react/20/solid"
 
 // detailed post fields
 interface PostDetails {
@@ -20,6 +21,7 @@ interface PostDetails {
 
 function View() {
 	const [data, setData] = useState<PostDetails | undefined>()
+	const [isPostCreator, setIsPostCreator] = useState<boolean>(false);
 	const { id } = useParams()
 	const navigate = useNavigate()
 
@@ -40,8 +42,13 @@ function View() {
 		fetch(`http://127.0.0.1:8000/api/posts/${id}/`)
 			.then((response) => response.json())
 			.then((data) => {
-				setData(data)
-			})
+				setData(data);
+
+      			// Check if the current user is the creator of the post
+     			const userIdString = localStorage.getItem("userId");
+      			const userId = userIdString !== null ? parseInt(userIdString, 10) : null;
+      			setIsPostCreator(!!data?.creator && data?.creator === userId);
+    			})
 			.catch((error) => {
 				console.error("Error fetching data:", error)
 			})
@@ -75,6 +82,34 @@ function View() {
 			console.error("Error sending contact request:", error);
 		  });
 	  };
+
+	const handleDeleteButtonClick = () => {
+		// Ensure that the user wants to delete the post
+		const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+		
+		if (confirmDelete) {
+		// Make a DELETE request to delete the post
+		fetch(`http://127.0.0.1:8000/api/posts/${id}/`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Token ${localStorage.getItem("authToken")}`,
+			},
+		})
+			.then((response) => {
+			if (response.status === 204) {
+				// Post deleted successfully, navigate to a relevant page (e.g., home)
+				navigate("/Home");
+			} else {
+				// Handle other status codes
+				alert("Error deleting the post");
+			}
+			})
+			.catch((error) => {
+			console.error("Error deleting the post:", error);
+			});
+		}
+	};
 
 	  return (
 		<>
@@ -125,6 +160,15 @@ function View() {
 					>
 						Contact
 					</button>
+					{isPostCreator && (
+            		<button
+              			type="button"
+              			className="delete-button"
+              			onClick={handleDeleteButtonClick}
+            		>
+               		<TrashIcon className="ml-full text-red-500 h-6 w-6" aria-hidden="true" />
+            </button>
+          )}
 				</div>
 			</div>
 		</>

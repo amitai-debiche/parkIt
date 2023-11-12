@@ -115,18 +115,7 @@ class PostList(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request, post_id):
-        try:
-            post = Post.objects.get(id=post_id)
-        except Post.DoesNotExist:
-            return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        # Check if the user is the creator of the post
-        if request.user != post.creator:
-            return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
-
-        post.delete()
-        return Response({'message': 'Post deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    
 
 class PostDetail(APIView):
 
@@ -142,9 +131,17 @@ class PostDetail(APIView):
         return Response(serializer.data)
     
     def delete(self, request, pk):
-        post = self.get_object(pk)
+        try:
+            post = Post.objects.get(id=pk)
+        except Post.DoesNotExist:
+            return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if the user is the creator of the post
+        if request.user != post.creator:
+            return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
+
         post.delete()
-        return Response(status= status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'Post deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     
     def post(self, request):
         serializer = PostSerializer(data=request.data)
