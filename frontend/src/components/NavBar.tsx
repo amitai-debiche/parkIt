@@ -16,7 +16,7 @@ function NavBar(props: NavProps) {
 			<div className="nav-align">
 				{/* parkIt logo */}
 				<div className="title-container">
-					<Link to="/">
+					<Link to="/home">
 						<h1 className="font-semibold text-4xl">parkIt</h1>
 					</Link>
 				</div>

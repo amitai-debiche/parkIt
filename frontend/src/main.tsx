@@ -8,11 +8,15 @@ import "./index.css"
 
 const router = createBrowserRouter([
   {
+		path: "/",
+		element: <Register />,
+	},
+  {
 		path: "/register",
 		element: <Register />,
 	},
 	{
-		path: "/",
+		path: "/home",
 		element: <Home />,
 	},
 	{

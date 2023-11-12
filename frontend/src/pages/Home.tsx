@@ -56,6 +56,7 @@ function Home() {
 							<div
 								className="hover:cursor-pointer"
 								onClick={() => onClickNavigate(post.id)}
+                key={post.id}
 							>
 								<HomePost
 									location={post.location}
@@ -63,7 +64,6 @@ function Home() {
 									price={post.price}
 									creator={post.creator}
 									id={post.id}
-									key={post.id}
 								/>
 							</div>
 						)
