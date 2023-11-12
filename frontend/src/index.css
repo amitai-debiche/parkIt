@@ -46,19 +46,24 @@
 
   /* Home Post Styling */ 
   .home-post-container {
-    @apply p-4 m-5 border shadow-md rounded-lg flex flex-col
+    @apply p-4 border shadow-md rounded-lg flex flex-col
   }
   
   .home-post-box {
     @apply w-[296px] h-[296px]
   }
 
-  /* Add Page Styling */
-  .add-container {
-    @apply p-4 m-5 border shadow-md rounded-lg flex flex-col
+  .home-grid {
+    @apply m-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4
   }
 
-  .add-box {
-    @apply h-full
+  /* View Page Styling */
+  .view-container {
+    @apply p-4 m-5 border shadow-md rounded-lg flex-col grid grid-cols-2 gap-4 h-[80vh]
   }
+
+  .body-text {
+    @apply text-base mt-3 text-gray-500
+  }
+
 }

@@ -1,6 +1,7 @@
 import NavBar from "../components/NavBar.tsx"
 import HomePost from "../components/HomePost.tsx"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import "../index.css"
 
 interface Data extends Array<Posts> {}
@@ -18,6 +19,7 @@ export interface Posts {
 function Home() {
 	const [data, setData] = useState<Data>([])
 	const [search, setSearch] = useState("")
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		// Replace 'api_url' with the actual URL of your Django API endpoint
@@ -35,25 +37,35 @@ function Home() {
 		setSearch(newSearch)
 	}
 
+	function onClickNavigate(postId: number) {
+		// You can specify the URL or path you want to navigate to here
+		navigate(`/view/${postId}/`)
+	}
+
 	return (
 		<>
-			<NavBar icons={3} search={homeSearchPosts} />
+			<NavBar icons={3} search={homeSearchPosts} searchHidden={false} />
 
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+			<div className="home-grid">
 				{data
 					.filter((post) =>
 						post.location.toLowerCase().includes(search.trim().toLowerCase())
 					)
 					.map((post) => {
 						return (
-							<HomePost
-								location={post.location}
-								spots={post.spots}
-								price={post.price}
-								creator={post.creator}
-								id={post.id}
-								key={post.id}
-							/>
+							<div
+								className="hover:cursor-pointer"
+								onClick={() => onClickNavigate(post.id)}
+							>
+								<HomePost
+									location={post.location}
+									spots={post.spots}
+									price={post.price}
+									creator={post.creator}
+									id={post.id}
+									key={post.id}
+								/>
+							</div>
 						)
 					})}
 			</div>
